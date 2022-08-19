@@ -7,7 +7,7 @@ const emailExists = async (email = '') => {
 		where: { email }
 	})
 	if (emailExist) {
-		throw new Error(`El email ${email} ya esta registrado.`)
+		throw new Error(`El email: ${email} ya esta registrado.`)
 	}
 }
 

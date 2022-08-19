@@ -6,8 +6,8 @@ const {
 	register
 } = require('../controllers/auth_controllers');
 //Import middlewares:
-const validarCampos = require( '../middlewares/validar_campos' );
-const {emailExists} = require( '../helpers/email_exist_validator' );
+const validarCampos = require('../middlewares/validar_campos');
+const { emailExists } = require('../helpers/email_exist_validator');
 
 /* Register new user endpoint */
 router.post('/register', [
