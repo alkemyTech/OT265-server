@@ -34,7 +34,7 @@ const putTestimonial = async (req, res = resonse) => {
 	if (content) testimonial.conent = content;
 	if (image) testimonial.image = image;
 
-	await Testimonial.save();
+	await testimonial.save();
 	res.status(200).json({ data: testimonial })
 }
 
