@@ -11,18 +11,23 @@ const storage = new S3({
     }
 });
 
-const uploadFile = (bucketName, file) => {
-    const stream = fs.createReadStream(file.tempFilePath);
-    const path = file.tempFilePath.split('-').pop();
-
-    const params = {
-        Bucket: bucketName,
-        Key: `${path}-${file.name}`,
-        Body: stream,
-    };
-    return storage.upload(params).promise();
-}
-
 module.exports = {
-    uploadFile
-};
+
+    uploadFile: (bucketName, file) => {
+        const body = fs.createReadStream(file.tempFilePath);
+        const path = file.tempFilePath.split('-').pop();
+        const key = `${path}${file.name}`
+        const params = {
+            Bucket: bucketName,
+            Key: key,
+            Body: body,
+        };
+
+        storage.upload(params).promise();
+
+        const url = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`
+
+        return url;
+    }
+
+}
