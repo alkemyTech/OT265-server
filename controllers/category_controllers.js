@@ -4,8 +4,11 @@ const Category = db.Category;
 class CategoryController {
 
     async get(req, res) {
-
-        const categories = await Category.findAll();
+        const categories = await Category.findAll({
+            attributes: {
+                exclude: ['deletedAt', 'createdAt', 'updatedAt']
+            }
+        });
 
         res.status(200).json({
             ok: true,
@@ -16,7 +19,12 @@ class CategoryController {
     async getOne(req, res) {
         const { id } = req.params;
 
-        const category = await Category.findByPk(id);
+        const category = await Category.findByPk(id, {
+            attributes: {
+                exclude: ['deletedAt', 'createdAt', 'updatedAt']
+            }
+        });
+
         if (!category) return res.json({ msg: 'Category not found.' });
 
         res.json({
@@ -39,7 +47,12 @@ class CategoryController {
         const { id } = req.params;
         const { name, description, image } = req.body;
 
-        const category = await Category.findByPk(id);
+        const category = await Category.findByPk(id, {
+            attributes: {
+                exclude: ['deletedAt', 'createdAt', 'updatedAt']
+            }
+        });
+
         if (!category) return res.json({ msg: 'Category not found.' })
 
         if (name) category.name = name;
@@ -56,7 +69,12 @@ class CategoryController {
     async delete(req, res = response) {
         const { id } = req.params;
 
-        const category = await Category.findByPk(id);
+        const category = await Category.findByPk(id, {
+            attributes: {
+                exclude: ['deletedAt', 'createdAt', 'updatedAt']
+            }
+        });
+        
         if (!category) return res.json({ msg: 'Category not found.' });
 
         category.destroy();
