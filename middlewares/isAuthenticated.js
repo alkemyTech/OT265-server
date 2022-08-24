@@ -5,7 +5,7 @@ const db = require('../models/index');
 const User = db.User;
 
 const isAuthenticated = async (req, res, next) => {
-	const token = req.header('x-token');
+	let token = req.header('Authorization');
 
 	if (!token) {
 		return res.status(403).json({
@@ -14,6 +14,7 @@ const isAuthenticated = async (req, res, next) => {
 	}
 
 	try {
+		token =  token.split(' ')[1]
 
 		const { id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
