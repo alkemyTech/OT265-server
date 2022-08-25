@@ -32,7 +32,49 @@ const register = async (req, res) => {
     accessToken
   })
 }
+//Controller de Login
+const login = async( req,res )=>{
+
+  const { email, password} = req.body;
+
+  try{
+    const user = await User.findOne( { where : { email }} )
+
+    if( !user ){
+      return res.status(400).json({
+        msg:"User not found"
+      })
+    }
+
+    //Comparar password
+    const validPassword = bcryptjs.compareSync( password, user.password)
+
+    if( !validPassword ){
+      return res.status(409).json({
+        msg:"Invalid Password"
+      })
+    }
+
+    //Generar Token
+    const token = await generateAccessToken( user.id )
+    res.json({
+      msg: "Login Ok",
+      user,
+      token
+    })
+
+  } catch ( error ){
+    console.log( error )
+    return res.status(500).json({
+      msg: "Contact the Administrator",
+    })
+  }
+  
+  
+}
 
 module.exports = {
-  register
+  register,
+  login
 }
+
