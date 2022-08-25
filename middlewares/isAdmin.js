@@ -3,7 +3,7 @@ const Role = db.Role;
 
 module.exports = {
 
-    isAdmin: async (req, res) => {
+    isAdmin: async (req, res, next) => {
         if(!req.userAuth) {
             return res.status(500).json({
                 ok: false,
