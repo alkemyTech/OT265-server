@@ -1,8 +1,7 @@
 const db = require('../models/index');
 const User = db.User;
 const bcryptjs = require('bcryptjs');
-
-const generateAccessToken = require('../helpers/jwt.js')
+const {generateAccessToken} = require('../helpers/jwt.js')
 
 const register = async (req, res) => {
   let { firstName, lastName, email, password } = req.body;
