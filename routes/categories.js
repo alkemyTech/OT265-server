@@ -17,5 +17,10 @@ router.post("/", [
 	validarCampos
 ], CategoryController.create)
 
+/* Get category detail endpoint */
+router.get('/:id', CategoryController.getOne);/* Corregir devolución del 404 */
+
+
+
 
 module.exports = router 
