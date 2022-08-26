@@ -1,6 +1,7 @@
 const db = require("../models/index.js");
-const { Op } = require("sequelize");
 const News = db.News;
+const Category = db.Category;
+const { uploadImage } = require("../services/uploadImages");
 
 const getAllNews = async (err, req, res, next) => {
   try {
@@ -22,179 +23,170 @@ const getAllNews = async (err, req, res, next) => {
   }
 };
 
-const getNewById = async (req, res = response) => {
-  const { newsId } = req.params;
+const getNewById = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const oneNews = await News.findOne({
-      where: {
-        id: newsId,
-      },
+    const news = await News.findOne({
+      where: { id },
+      include: [{
+        model: Category,
+        as: 'category',
+        attributes: ['name']
+      }]
     });
 
-    if (!oneNews) {
-      res.status(200).json({
+    if (!news) {
+      return res.status(200).json({
         ok: true,
-        message: "This news item has not been found.",
-      });
-    } else {
-      res.status(200).json({
-        ok: true,
-        data: oneNews,
+        msg: `There is no news with id: ${id}.`
       });
     }
-  } catch (err) {
-    next(err);
-  }
-};
-
-const getNewByName = async (req, res = response) => {
-  const { newsName } = req.params;
-
-  try {
-    const news = await News.findAll();
-
-    const fixedNews = news.filter((n) =>
-      n.dataValues.name.toLowerCase().includes(newsName.toLowerCase())
-    );
-
-    if (!fixedNews) {
-      res.status(200).json({
-        ok: true,
-        message: "No news with this name have been found.",
-      });
-    } else {
-      await fixedNews.sort((a, b) => {
-        if (a.name.length > b.name.length) {
-          return 1;
-        } else if (a.name.length < b.name.length) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
-
-      res.status(200).json({
-        ok: true,
-        data: fixedNews,
-      });
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-const postNews = async (req, res = response) => {
-  try {
-    const { name, content, image, categoryId } = req.body;
-
-    const category = await Category.findOne({
-      where: {
-        id: categoryId,
-      },
-    });
-
-    if (!category) {
-      res.status(200).json({
-        ok: false,
-        message: "The category requested does not exist.",
-      });
-      return;
-    }
-    const newNews = await News.create({
-      name,
-      content,
-      image,
-    });
-
-    newNews.addCategory(category);
 
     res.status(200).json({
       ok: true,
-      data: newNews,
+      data: news,
     });
+
   } catch (err) {
-    next(err);
+    console.log(err);
+    return res.status(500).json({
+      ok: false,
+      message: "Server side error, contact an Administrator."
+    })
   }
 };
 
-const putNews = async (req, res = response) => {
+const postNews = async (req, res) => {
+  const { name, content, categoryId } = req.body;
+
   try {
-    const { newsId, oldCategoryId, newCategoryId } = req.query;
-    const { name, content, image } = req.body;
 
-    const findNews = await News.findOne({
-      where: {
-        id: newsId,
-      },
-      include: [
-        {
-          model: Category,
-        },
-      ],
-    });
+    let imgUrl = ''
 
-    if (oldCategoryId && newCategoryId) {
-      const findOldCategory = await Category.findOne({
-        where: {
-          id: oldCategoryId,
-        },
-      });
+    if (req.files) {
+      
+      const { image } = req.files;
+      imgUrl = await uploadImage(image);
 
-      const findNewCategory = await Category.findOne({
-        where: {
-          id: newCategoryId,
-        },
-      });
-      if (findOldCategory && findNewCategory) {
-        findCategory && findNews.remodeCategory(oldCategoryId);
-        findNews.addCategory(newCategoryId);
-      } else {
-        res.status(400).json({
+      if (imgUrl === '') {
+        return res.status(400).json({
           ok: false,
-          message: "Category not found.",
-        });
+          msg: 'Extension not supported.'
+        })
       }
     }
 
-    await News.update(
-      {
-        name,
-        content,
-        image,
-      },
-      {
-        where: {
-          id: newsId,
-        },
-      }
-    );
+    const category = await Category.findByPk(categoryId);
+
+    if (!category) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'This category does not exist.'
+      })
+    }
+
+    const news = await News.create({ name, content, categoryId, image: imgUrl });
+
+    res.status(200).json({
+      ok: true,
+      msg: 'Created.',
+      data: news
+    })
+
   } catch (err) {
-    next(err);
+    console.log(err);
+    return res.status(500).json({
+      ok: false,
+      msg: 'Server side error. Contact and Administrator.'
+    })
   }
 };
 
-const deleteNews = async (req, res = response) => {
-    const { newsId } = req.params;
+const putNews = async (req, res) => {
+  const { name, content, categoryId } = req.body;
 
-    const news = await News.findByPk(newsId);
-    if (!news) return res.status(400).json({
+  try {
+    const { id } = req.params;
+
+    const news = await News.findByPk(id);
+    if (!news) {
+      return res.status(400).json({
         ok: false,
-        message: "This news item has not been found.",
-      });;
+        msg: `There is no news with id: ${id}.`
+      })
+    }
 
-    news.destroy();
-    res.status(200).json({
-        ok: true,
-        data: news
+    if (name) news.name = name;
+    if (content) news.content = content;
+    if (categoryId) news.categoryId = categoryId;
+
+    if (categoryId) {
+      const category = await Category.findByPk(categoryId);
+
+      if (!category) {
+        return res.json({
+          ok: false,
+          msg: 'This category does not exist.'
+        })
+      }
+
+      news.categoryId = categoryId;
+    }
+
+    if (req.files) {
+      const { image } = req.files;
+      const imgUrl = await uploadImage(image);
+      if (imgUrl === '') {
+        return res.json({
+          ok: false,
+          msg: 'Extension not supported.'
+        })
+      }
+
+      news.image = imgUrl;
+    }
+
+    news.save();
+
+    res.json({
+      ok: true,
+      msg: 'Updated.',
+      data: news
     })
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      ok: false,
+      msg: 'Server side error.'
+    })
+  }
+};
+
+const deleteNews = async (req, res) => {
+  const { id } = req.params;
+
+  const news = await News.findByPk(id);
+  if (!news) {
+    return res.status(400).json({
+      ok: false,
+      msg: `There is no news with id: ${id}.`
+    })
+  }
+
+  news.destroy();
+
+  res.status(200).json({
+    ok: true,
+    msg: 'Deleted.',
+    data: news
+  })
 
 };
 
 module.exports = {
   getAllNews,
   getNewById,
-  getNewByName,
   postNews,
   putNews,
   deleteNews,
