@@ -10,7 +10,10 @@ class MemberController {
             }
         });
 
-        if (!members) return res.json({ msg: 'There are no members yet.' })
+        if (!members.length) return res.json({
+            success: false,
+            message: 'No members have been created yet'
+        })
 
         res.status(200).json({
             ok: true,
@@ -42,15 +45,11 @@ class MemberController {
             linkedinUrl,
             description
         } = req.body;
-        // NAME CHECK
-        if (!name || typeof name !== 'string') return res.send({
-            success: false,
-            message: 'Name is a needed character or it needs to be a string'
-        });
         // AWS S3 IMAGE SERVICE CHECK
+        let imgUrl = ''
         if (req.files) {
             const { image } = req.files;
-            const imgUrl = await uploadImage(image);
+            imgUrl = await uploadImage(image);
             if (imgUrl === '') return res.status(403).send({
                 success: false,
                 message: 'invalid image format',
