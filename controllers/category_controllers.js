@@ -5,9 +5,7 @@ class CategoryController {
 
     async get(req, res) {
         const categories = await Category.findAll({
-            attributes: {
-                exclude: ['deletedAt', 'createdAt', 'updatedAt']
-            }
+            attributes: ["name"]
         });
 
         res.status(200).json({

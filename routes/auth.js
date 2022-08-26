@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 
 //import Controllers:
 const {
-	register
+	register, login
 } = require('../controllers/auth_controllers');
 //Import middlewares:
 const validarCampos = require('../middlewares/validar_campos');
