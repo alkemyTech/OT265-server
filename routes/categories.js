@@ -11,6 +11,11 @@ const  CategoryController  = require("../controllers/category_controllers")
 /* Get all categories endpoint */
 router.get('/', CategoryController.get);
 
+/* create category endpoint */
+router.post("/", [
+	check('name', 'El nombre es obligatorio y debe ser un string.').not().isEmpty().isString(),
+	validarCampos
+], CategoryController.create)
 
 
 module.exports = router 
