@@ -1,5 +1,6 @@
 const db = require('../models/index.js')
 const Member = db.Member
+const { uploadImage } = require('../services/uploadImages')
 
 class MemberController {
 
@@ -80,14 +81,28 @@ class MemberController {
             }
         });
 
-        if (!member) return res.json({ msg: 'Member not found.' })
+        if (!member) return res.json({
+            success: false,
+            message: `The member id: ${id} doesn't exist`
+        });
 
         if (name) member.name = name;
         if (facebookUrl) member.facebookUrl = facebookUrl;
         if (instagramUrl) member.instagramUrl = instagramUrl;
         if (linkedinUrl) member.linkedinUrl = linkedinUrl;
         if (description) member.description = description;
-        // It is required to implement the AWS S3 service to upload the image.
+        // AWS S3 IMAGE SERVICE CHECK
+        if (req.files.image) {
+            let imgUrl = ''
+            const { image } = req.files;
+            imgUrl = await uploadImage(image);
+            if (imgUrl === '') return res.status(403).send({
+                success: false,
+                message: 'invalid image format',
+                image: `${image}`
+            });
+            member.image = imgUrl;
+        }
         await member.save();
 
         res.status(200).json({
