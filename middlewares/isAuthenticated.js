@@ -19,7 +19,11 @@ const isAuthenticated = async (req, res, next) => {
 		const { id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 		req.id = id;
-		req.userAuth = await User.findByPk(id)
+		req.userAuth = await User.findByPk(id, { 
+			attributes: { 
+			  exclude: ['password', 'deletedAt', 'createdAt', 'updatedAt']
+			}
+		});
 
 		if (!req.userAuth) {
 			return res.status(403).json({

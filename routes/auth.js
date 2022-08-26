@@ -2,10 +2,11 @@ const router = require("express").Router();
 const { check } = require("express-validator");
 
 //import Controllers:
-const { login, register } = require("../controllers/auth_controllers");
+const { login, register, dataUserAuth } = require("../controllers/auth_controllers");
 //Import middlewares:
 const validarCampos = require("../middlewares/validar_campos");
 const { emailExists } = require("../helpers/email_exist_validator");
+const isAuthenticated = require("../middlewares/isAuthenticated")
 
 /* Register new user endpoint */
 router.post(
@@ -27,5 +28,9 @@ router.post(
 
 //Endpoint Login
 router.post("/login", login);
+
+router.get("/me", [
+  isAuthenticated
+], dataUserAuth)
 
 module.exports = router;
