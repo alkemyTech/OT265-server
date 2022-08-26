@@ -20,7 +20,8 @@ router.post("/", [
 /* Get category detail endpoint */
 router.get('/:id', CategoryController.getOne);/* Corregir devolución del 404 */
 
-
+/* Category update endpoint */
+router.put('/:id', CategoryController.update);
 
 
 module.exports = router 
