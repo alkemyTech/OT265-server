@@ -2,7 +2,9 @@ const db = require('../models/index');
 const Organization = db.Organization;
 
 const getAllOrganizations = async (req, res) => {
-	const organizations = await Organization.findAll();
+	const organizations = await Organization.findAll({
+		attributes: ["name","image","phone","address"]
+	});
 	res.status(200).json({ data: organizations })
 }
 
