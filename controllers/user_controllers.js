@@ -21,7 +21,7 @@ const putUser = async (req, res = resonse) => {
 	let { firstName, lastName, email, password, photo, roleId } = req.body;
 
 	const user = await User.findByPk(id);
-	if (!user) return res.status(400).json({ msg: 'User not found.' })
+	if (!user) return res.status(404).json({ msg: 'User not found.' })
 
 	if (password) {
 		const salt = bcryptjs.genSaltSync();
