@@ -42,16 +42,28 @@ class MemberController {
             linkedinUrl,
             description
         } = req.body;
-
-        const member = await Member.create({ name, facebookUrl, instagramUrl, linkedinUrl, description });
-
-        // It is required to implement the AWS S3 service to upload the image.
-
+        // NAME CHECK
+        if (!name || typeof name !== 'string') return res.send({
+            success: false,
+            message: 'Name is a needed character or it needs to be a string'
+        });
+        // AWS S3 IMAGE SERVICE CHECK
+        if (req.files) {
+            const { image } = req.files;
+            const imgUrl = await uploadImage(image);
+            if (imgUrl === '') return res.status(403).send({
+                success: false,
+                message: 'invalid image format',
+                image: `${image}`
+            });
+        }
+        await Member.create({ name, facebookUrl, instagramUrl, linkedinUrl, description, image: imgUrl });
         res.status(200).json({
-            ok: true,
-            data: member
-        })
+            success: true,
+            message: 'Member created successfully'
+        });
     }
+
 
     async update(req, res) {
         const { id } = req.params;
