@@ -10,7 +10,7 @@ router.get('/', [
   isAdmin
 ], getAllUsers);
 
-router.get('/:id', [
+router.delete('/:id', [
   isAuthenticated,
   isOwnership,
 ], deleteUser)
