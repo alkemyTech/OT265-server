@@ -18,6 +18,7 @@ router.post('/register', [
 	validarCampos
 ], register);
 
-
+//Endpoint Login
+router.post('/login', login)
 
 module.exports = router;
