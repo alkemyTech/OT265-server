@@ -1,11 +1,16 @@
 const db = require('../models/index');
 const Testimonial = db.Testimonial;
-const { uploadImage } = require('../services/uploadImages')
+const { uploadImage } = require('../services/uploadImages');
+const member_controllers = require('./member_controllers');
 
 const getAllTestimonials = async (req, res) => {
 	try {
 		const testimonials = await Testimonial.findAll();
-		res.status(200).json({
+		if (!testimonials.length) return res.status(200).send({
+			success: true,
+			message: "No testimonials have been created yet"
+		})
+		res.status(200).send({
 			success: true,
 			testimonials: testimonials
 		})
@@ -102,15 +107,29 @@ const putTestimonial = async (req, res) => {
 }
 
 const deleteTestimonial = async (req, res) => {
-	const { id } = req.params;
+	try {
 
-	const testimonial = await Testimonial.findByPk(id);
-	if (!testimonial) return res.json({ msg: 'Testimonial not found.' });
+		const { id } = req.params;
 
-	testimonial.deletedAt = new Date().toLocaleDateString();
-	await testimonial.save();
+		const testimonial = await Testimonial.findByPk(id);
+		if (!testimonial) return res.json({
+			success: false,
+			message: `Testimonial ID: ${id} doesn't exist`
+		});
 
-	res.status(200).json({ data: testimonial })
+		testimonial.destroy();
+
+		res.status(200).json({
+			success: true,
+			message: "Testimonial deleted successfully",
+			data: testimonial
+		})
+	} catch (err) {
+		res.status(400).send({
+			error: true,
+			message: err.message,
+		})
+	}
 }
 
 module.exports = {

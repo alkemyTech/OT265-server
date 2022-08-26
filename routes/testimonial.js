@@ -22,6 +22,6 @@ router.post('/', [
 
 router.put('/:id', putTestimonial);
 
-router.delete('/:id',);
+router.delete('/:id', deleteTestimonial);
 
 module.exports = router;
