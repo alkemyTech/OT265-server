@@ -10,7 +10,10 @@ class MemberController {
             }
         });
 
-        if (!members) return res.json({ msg: 'There are no members yet.' })
+        if (!members.length) return res.json({
+            success: false,
+            message: 'No members have been created yet'
+        })
 
         res.status(200).json({
             ok: true,
@@ -42,16 +45,24 @@ class MemberController {
             linkedinUrl,
             description
         } = req.body;
-
-        const member = await Member.create({ name, facebookUrl, instagramUrl, linkedinUrl, description });
-
-        // It is required to implement the AWS S3 service to upload the image.
-
+        // AWS S3 IMAGE SERVICE CHECK
+        let imgUrl = ''
+        if (req.files) {
+            const { image } = req.files;
+            imgUrl = await uploadImage(image);
+            if (imgUrl === '') return res.status(403).send({
+                success: false,
+                message: 'invalid image format',
+                image: `${image}`
+            });
+        }
+        await Member.create({ name, facebookUrl, instagramUrl, linkedinUrl, description, image: imgUrl });
         res.status(200).json({
-            ok: true,
-            data: member
-        })
+            success: true,
+            message: 'Member created successfully'
+        });
     }
+
 
     async update(req, res) {
         const { id } = req.params;

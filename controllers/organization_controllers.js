@@ -1,13 +1,12 @@
-const { response } = require('../app');
 const db = require('../models/index');
 const Organization = db.Organization;
 
-const getAllOrganizations = async (req, res = response) => {
+const getAllOrganizations = async (req, res) => {
 	const organizations = await Organization.findAll();
 	res.status(200).json({ data: organizations })
 }
 
-const getOrganizationById = async (req, res = response) => {
+const getOrganizationById = async (req, res) => {
 	const { id } = req.params;
 
 	const organization = await Organization.findByPk(id);
@@ -16,7 +15,7 @@ const getOrganizationById = async (req, res = response) => {
 	res.json({ data: organization })
 }
 
-const postOrganization = async (req, res = response) => {
+const postOrganization = async (req, res) => {
 	const { name, image, address, phone, email, welcomeText, aboutUsText } = req.body;
 
 	const organization = await Organization.create({ name, image, address, phone, email, welcomeText, aboutUsText });
@@ -42,7 +41,7 @@ const putOrganization = async (req, res = resonse) => {
 	res.status(200).json({ data: organization })
 }
 
-const deleteOrganization = async (req, res = response) => {
+const deleteOrganization = async (req, res) => {
 	const { id } = req.params;
 
 	const organization = await Organization.findByPk(id);

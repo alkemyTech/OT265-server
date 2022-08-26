@@ -1,13 +1,12 @@
-const { response } = require('../app');
 const db = require('../models/index');
 const Testimonial = db.Testomonial;
 
-const getAllTestimonials = async (req, res = response) => {
+const getAllTestimonials = async (req, res) => {
 	const testimonials = await Testimonial.findAll();
 	res.status(200).json({ data: testimonials })
 }
 
-const getTestimonialById = async (req, res = response) => {
+const getTestimonialById = async (req, res) => {
 	const { id } = req.params;
 
 	const testimonial = await Testimonial.findByPk(id);
@@ -16,7 +15,7 @@ const getTestimonialById = async (req, res = response) => {
 	res.json({ data: testimonial })
 }
 
-const postTestimonial = async (req, res = response) => {
+const postTestimonial = async (req, res) => {
 	const { name, content, image } = req.body;
 
 	const testimonial = await Testimonial.create({ name, content, image });
@@ -38,7 +37,7 @@ const putTestimonial = async (req, res = resonse) => {
 	res.status(200).json({ data: testimonial })
 }
 
-const deleteTestimonial = async (req, res = response) => {
+const deleteTestimonial = async (req, res) => {
 	const { id } = req.params;
 
 	const testimonial = await Testimonial.findByPk(id);
