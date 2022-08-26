@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      News.belongsTo(models.Category, {as: 'category'});
+      News.belongsTo(models.Category, { as: 'category' });
     }
   };
   News.init({
     name: DataTypes.STRING,
-    content: DataTypes.Text,
+    content: DataTypes.TEXT,
     image: DataTypes.STRING
   }, {
     sequelize,
