@@ -2,29 +2,37 @@ const db = require('../models/index');
 const User = db.User;
 const bcryptjs = require('bcryptjs');
 
+const { generateAccessToken } = require('../helpers/jwt.js')
+
 const register = async (req, res) => {
-	let { firstName, lastName, email, password } = req.body;
+  let { firstName, lastName, email, password } = req.body;
 
-	//Encriptar la PW:
-	const salt = bcryptjs.genSaltSync();	
-	password = bcryptjs.hashSync(password, salt);
+  //Encriptar la PW:
+  const salt = bcryptjs.genSaltSync();
+  password = bcryptjs.hashSync(password, salt);
 
-	//Guardar en DB:
+  //Guardar en DB:
   const newUser = await User.create({
     firstName,
     lastName,
     email,
-		password
+    password
   })
 
-	res.status(201).json({
+  //Generar JWT para loggear al usuario luego de que se registre:
+  const accessToken = generateAccessToken(newUser);
+
+  res.status(201).json({
     msg: "Usuario creado con exito.",
-    firstName,
-    lastName,
-		email
+    user: {
+      firstName,
+      lastName,
+      email
+    },
+    accessToken
   })
 }
 
 module.exports = {
-	register
+  register
 }
