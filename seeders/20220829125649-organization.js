@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert('Organizations', [
       {
         name: 'ONG-265',
         image: 'https://images.pexels.com/photos/7156170/pexels-photo-7156170.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -13,7 +13,9 @@ module.exports = {
         aboutUsText: 'Somos una organización sin fines de lucro',
         facebook: "https://www.facebook.com",
         linkedin: "https://www.linkedin.com",
-        instagram: "https://www.instagram.com"
+        instagram: "https://www.instagram.com",
+        createdAt: new Date,
+        updatedAt: new Date
     }], {});
   },
 
