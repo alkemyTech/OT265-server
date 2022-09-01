@@ -11,8 +11,13 @@ require("dotenv").config();
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const memberRouter = require("./routes/member");
 const swaggerDocumentation = require("./helpers/documentation");
 const activitiesRouter = require("./routes/activities");
+const newsRouter = require("./routes/news");
+const categoriesRouter = require("./routes/categories");
+const organizationRouter = require("./routes/organization");
+
 
 const app = express();
 app.use(cors());
@@ -38,9 +43,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/members", memberRouter);
 app.use("/activities", activitiesRouter);
 app.use("/api/docs", swaggerDoc.serve);
 app.use("/api/docs", swaggerDoc.setup(swaggerDocumentation));
+app.use("/news", newsRouter)
+app.use("/categories", categoriesRouter);
+app.use("/organization", organizationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

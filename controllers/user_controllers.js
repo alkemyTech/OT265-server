@@ -1,13 +1,13 @@
-const { response } = require('../app');
+
 const db = require('../models/index');
 const User = db.User;
 
-const getAllUsers = async (req, res = response) => {
+const getAllUsers = async (req, res) => {
 	const users = await User.findAll();
 	res.status(200).json({ data: users })
 }
 
-const getUserById = async (req, res = response) => {
+const getUserById = async (req, res) => {
 	const { id } = req.params;
 
 	const user = await User.findByPk(id);
@@ -39,7 +39,7 @@ const putUser = async (req, res = resonse) => {
 	res.status(200).json({ data: user })
 }
 
-const deleteUser = async (req, res = response) => {
+const deleteUser = async (req, res) => {
 	const { id } = req.params;
 
 	const user = await User.findByPk(id);

@@ -5,9 +5,7 @@ class CategoryController {
 
     async get(req, res) {
         const categories = await Category.findAll({
-            attributes: {
-                exclude: ['deletedAt', 'createdAt', 'updatedAt']
-            }
+            attributes: ["name"]
         });
 
         res.status(200).json({
@@ -25,7 +23,7 @@ class CategoryController {
             }
         });
 
-        if (!category) return res.json({ msg: 'Category not found.' });
+        if (!category) return res.status(404).json({ msg: 'Category not found.' });
 
         res.json({
             ok: true,
@@ -53,7 +51,7 @@ class CategoryController {
             }
         });
 
-        if (!category) return res.json({ msg: 'Category not found.' })
+        if (!category) return res.status(404).json({ msg: 'Category not found.' })
 
         if (name) category.name = name;
         if (description) category.description = description;
@@ -75,7 +73,7 @@ class CategoryController {
             }
         });
         
-        if (!category) return res.json({ msg: 'Category not found.' });
+        if (!category) return res.status(404).json({ msg: 'Category not found.' });
 
         category.destroy();
         res.status(200).json({
