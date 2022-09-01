@@ -73,8 +73,19 @@ const login = async( req,res )=>{
   
 }
 
+const dataUserAuth = async(req, res, next) => {
+  const { userAuth } = req;
+
+  res.status(200).json({
+    ok: true,
+    data: userAuth
+  })
+
+}
+
 module.exports = {
   register,
-  login
+  login,
+  dataUserAuth
 }
 
