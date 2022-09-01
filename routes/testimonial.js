@@ -20,8 +20,8 @@ router.post('/', [
     validarCampos,
 ], postTestimonial);
 
-router.put('/:id',);
+router.put('/:id', putTestimonial);
 
-router.delete('/:id',);
+router.delete('/:id', deleteTestimonial);
 
 module.exports = router;
