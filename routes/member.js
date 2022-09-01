@@ -12,10 +12,9 @@ router.post('/', [
     validarCampos,
 ], member.create);
 
-router.delete('/:id',
+router.delete('/:id', member.delete);
 
-    member.delete);
-
+router.put('/:id', member.update);
 module.exports = router;
 
 
