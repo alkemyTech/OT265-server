@@ -20,6 +20,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      categoryId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      deletedAt: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
