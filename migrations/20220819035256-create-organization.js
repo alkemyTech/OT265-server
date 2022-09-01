@@ -20,17 +20,26 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       email: {
         allowNull: false,
         type: Sequelize.STRING
       },
       welcomeText: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       aboutUsText: {
+        type: Sequelize.STRING
+      },
+      facebook: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      linkedin: {
+        type: Sequelize.STRING
+      },
+      instagram: {
         type: Sequelize.STRING
       },
       deletedAt: {

@@ -15,6 +15,7 @@ const memberRouter = require("./routes/member");
 const swaggerDocumentation = require("./helpers/documentation");
 const activitiesRouter = require("./routes/activities");
 const categoriesRouter = require("./routes/categories");
+const organizationRouter = require("./routes/organization");
 
 const app = express();
 app.use(cors());
@@ -45,6 +46,7 @@ app.use("/activities", activitiesRouter);
 app.use("/api/docs", swaggerDoc.serve);
 app.use("/api/docs", swaggerDoc.setup(swaggerDocumentation));categoriesRouter
 app.use("/categories", categoriesRouter);
+app.use("/organization", organizationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
