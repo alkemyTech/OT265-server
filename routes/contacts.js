@@ -6,6 +6,8 @@ const contactController = require('../controllers/contact_controller');
 
 //Import middlewares:
 const validarCampos = require("../middlewares/validar_campos");
+const {isAdmin} = require("../middlewares/isAdmin")
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 /* Post new contact */
 router.post('/',
@@ -23,5 +25,8 @@ router.post('/',
             .isString(),
         validarCampos,
     ], contactController.new);
+
+/* GET all contacts */
+router.get("/", [isAuthenticated, isAdmin], contactController.getAll)
 
 module.exports = router;
