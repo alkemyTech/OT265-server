@@ -1,4 +1,6 @@
+
 const db = require('../models/index');
+const sendEmail = require('../services/sendEmail');
 const Contacts = db.Contacts;
 
 const contactController = {
@@ -26,6 +28,11 @@ const contactController = {
             phone,
             message,
         })
+
+        const subject = 'Bienvenido a ONG-265'
+        const title = `¡Hola ${name}!`
+        const text = "Muchas gracias por comunicarte con nosotros. Te responderemos a la brevedad"
+        sendEmail(email, subject, title, text)
 
         res.status(200).json({
 			success: true,
