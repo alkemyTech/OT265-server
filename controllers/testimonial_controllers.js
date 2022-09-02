@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const Testimonial = db.Testimonial;
+const Testimonial = db.Testimonials;
 const { uploadImage } = require('../services/uploadImages');
 const member_controllers = require('./member_controllers');
 
