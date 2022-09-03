@@ -4,14 +4,43 @@ const Category = db.Category;
 class CategoryController {
 
     async get(req, res) {
-        const categories = await Category.findAll({
-            attributes: ["name"]
+        const { page } = req.query;
+        let currentPage = page ? Number.parseInt(page) : 1;
+        let pageLimit = 10;
+        let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+        const categories = await Category.findAndCountAll({
+            attributes: ["name"],
+            limit: pageLimit,
+            offset: (currentPage * pageLimit) - pageLimit
         });
 
-        res.status(200).json({
+        if (!categories.count) {
+            return res.json({
+            success: false,
+            message: 'No categories have been created yet'
+        })} else if(categories.count && !categories.rows.length) {
+            return res.json({
+                success: false,
+                message: 'Invalid page.'
+            })
+        };
+
+        const nextPage = !page ? `${currentUrl}?page=2` : currentUrl.replace(`page=${page}`, `page=${currentPage + 1}`);
+        const previousPage = `${currentUrl.replace(`page=${page}`, `page=${currentPage - 1}`)}`;
+
+        const response = {
             ok: true,
-            data: categories
-        })
+            totalPages: categories.count / pageLimit,
+            next: nextPage,
+            previous: previousPage,
+            data: categories.rows,
+        };
+
+        if(page >= categories.count / pageLimit) response.next = null
+        if(!page || page - 1 <= 0) response.previous = null
+        
+        res.status(200).json(response)
     }
 
     async getOne(req, res) {

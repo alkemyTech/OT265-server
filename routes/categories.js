@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { check } = require('express-validator');
+const { query } = require('express-validator/check')
 
 //import Controllers:
 const validarCampos = require('../middlewares/validar_campos');
@@ -9,7 +10,10 @@ const  CategoryController  = require("../controllers/category_controllers")
 
 
 /* Get all categories endpoint */
-router.get('/', CategoryController.get);
+router.get('/', [
+	query("page", "The page must be type number and positive").optional().isInt({ min: 1 }),
+    validarCampos,
+], CategoryController.get);
 
 /* create category endpoint */
 router.post("/", [
