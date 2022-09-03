@@ -1,25 +1,48 @@
 const db = require('../models/index.js')
 const Member = db.Member
-const { uploadImage } = require('../services/uploadImages')
+const { uploadImage } = require('../services/uploadImages')   
+
 
 class MemberController {
 
     async get(req, res) {
-        const members = await Member.findAll({
+        const { page } = req.query;
+        let currentPage = page ? Number.parseInt(page) : 1
+        let pageLimit = 10;
+        let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+        const members = await Member.findAndCountAll({
             attributes: {
                 exclude: ['deletedAt', 'createdAt', 'updatedAt']
-            }
+            },
+            limit: pageLimit,
+            offset: (currentPage * pageLimit) - pageLimit
         });
 
-        if (!members.length) return res.json({
+        if (!members.count) {
+            return res.json({
             success: false,
             message: 'No members have been created yet'
-        })
+        })} else if(members.count && !members.rows.length) {
+            return res.json({
+            success: false,
+            message: 'Invalid page.'
+        })};
 
-        res.status(200).json({
+        const nextPage = !page ? `${currentUrl}?page=2` : currentUrl.replace(`page=${page}`, `page=${currentPage + 1}`);
+        const previousPage = `${currentUrl.replace(`page=${page}`, `page=${currentPage - 1}`)}`;
+
+        const response = {
             ok: true,
-            data: members
-        })
+            totalPages: members.count / pageLimit,
+            next: nextPage,
+            previous: previousPage,
+            data: members.rows,
+        };
+
+        if(page >= members.count / pageLimit) response.next = null
+        if(!page || page - 1 <= 0) response.previous = null
+        res.status(200).json(response)
     }
 
     async getOne(req, res) {
