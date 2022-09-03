@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { check } = require("express-validator");
+const { query } = require('express-validator/check')
 const validarCampos = require("../middlewares/validar_campos");
 const {
     getAllTestimonials,
@@ -10,7 +11,10 @@ const {
     deleteTestimonial
 } = require('../controllers/testimonial_controllers');
 /* GET home page. */
-router.get('/', getAllTestimonials);
+router.get('/', [
+    query("page", "The page must be type number and positive").optional().isInt({ min: 1 }),
+    validarCampos,
+], getAllTestimonials);
 
 router.post('/', [
     check("name", "The name field must not be empty.").not().isEmpty(),
