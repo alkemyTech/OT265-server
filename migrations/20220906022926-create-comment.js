@@ -8,13 +8,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER
-      },
       body: {
         type: Sequelize.STRING
       },
-      post_id: {
+      user_id: {
+        type: Sequelize.INTEGER
+      },
+      news_id: {
         type: Sequelize.INTEGER
       },
       deletedAt: {

@@ -20,16 +20,38 @@ class CommentControllers {
         }
     }
 
+    async getComments(req, res) {
+        const { id } = req.params;
+        try {
+            const comments = await Comment.findAll({ where: { news_id: id } });
+            res.status(200).json({
+                ok: true,
+                data: comments
+            })
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                ok: false,
+                msg: 'Server side error. Contact an Administrator.'
+            })
+        }
+    }
+
     async create(req, res) {
-        const { body, post_id } = req.body;
+        const { body, news_id } = req.body;
         const { id } = req.userAuth; // The user should come in the "isAuthenticated" middleware
 
         try {
             const comment = await Comment.create({
-                post_id,
+                news_id,
                 body,
                 user_id: id
             })
+            if (!comment) {
+                return res.json({
+                    ok: false
+                })
+            }
             res.status(200).json({
                 ok: true,
                 data: comment
@@ -48,6 +70,12 @@ class CommentControllers {
         const { body } = req.body;
         try {
             const comment = await Comment.findByPk(comment_id);
+            if (!comment) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'There is no comment with this ID.'
+                })
+            }
             const { id, roleId } = req.userAuth;
             const { name } = await Role.findByPk(roleId);
             if (id != comment.user_id && name != 'Admin') {
@@ -77,6 +105,12 @@ class CommentControllers {
         const { comment_id } = req.params;
         try {
             const comment = await Comment.findByPk(comment_id);
+            if (!comment) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'There is no comment with this ID.'
+                })
+            }
             const { id, roleId } = req.userAuth;
             const { name } = await Role.findByPk(roleId);
             if (id != comment.user_id && name != 'Admin') {
