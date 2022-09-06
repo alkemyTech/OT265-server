@@ -6,6 +6,7 @@ const { isAdmin } = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const validarCampos = require("../middlewares/validar_campos");
 const { getNewById, postNews, putNews, deleteNews } = require("../controllers/newsControllers");
+const Comment = require("../controllers/comment_controllers");
 const { checkImage } = require("../middlewares/checkImage");
 
 router.get("/:id", [
@@ -34,5 +35,10 @@ router.delete("/:id", [
     isAuthenticated,
     isAdmin
 ], deleteNews)
+
+// List the comments of a news.
+router.get("/:id/comments", [
+    isAuthenticated
+], Comment.getComments)
 
 module.exports = router;
