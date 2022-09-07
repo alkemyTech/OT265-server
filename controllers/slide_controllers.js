@@ -1,6 +1,6 @@
 const db = require('../models/index.js')
 const Slide = db.Slide
-const { decodeBase64Image } = require('../helpers/image-helpers');
+// const { decodeBase64Image } = require('../helpers/image-helpers');
 const { response } = require('express');
 const { uploadImage } = require('../services/uploadImages.js');
 
@@ -28,25 +28,33 @@ const slideDetails = async (req, res) => {
 
 
 const create_slide = async (req, res) => {
-    const allowedExtensions = ['png', 'jpg']; //robadisimo de otro lado :D
     try {
-        const { image, text, order, organizationId } = req.body;
+        const image = require('../images/image')
+        const { text, organizationId } = req.body;
 
-        let response = decodeBase64Image(image);
+        // let response = decodeBase64Image(image);
+        // console.log(response);
         //decodea la imagen y devuelve response con tipo de extension y la imagen
-        if (!response && !allowedExtensions.includes(response.type)) return res.status(400).send({
+        // console.log("HERE BE RESPONSE  ", response)
+        if (!response) return res.status(400).send({
             success: false,
             message: "Wrong file extension"
         });
 
-        imgUrl = await uploadImage(response);
+        imgUrl = await uploadImage(image);
+        console.log(imgUrl);
         if (imgUrl === '') return res.status(403).send({
             success: false,
             message: 'Image could not be found',
             image: `${image}`
         });
 
-        await Slide.create(imageUrl = imgUrl, text, order, organizationId);
+        if (!order) {
+            var count = await Slide.count();
+            count++;
+        }
+
+        await Slide.create(imageUrl = imgUrl, text, order ? order : order = count, organizationId);
 
         res.status(201).send({
             success: true,
