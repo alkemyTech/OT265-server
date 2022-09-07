@@ -29,7 +29,7 @@ const contactController = {
         message,
       })
 
-      const subject = 'Bienvenido a ONG-265'
+      const subject = 'Gracias por comunicarte'
       const title = `¡Hola ${name}!`
       const text = "Muchas gracias por comunicarte con nosotros. Te responderemos a la brevedad"
       sendEmail(email, subject, title, text)

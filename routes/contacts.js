@@ -6,7 +6,7 @@ const contactController = require('../controllers/contact_controller');
 
 //Import middlewares:
 const validarCampos = require("../middlewares/validar_campos");
-const {isAdmin} = require("../middlewares/isAdmin")
+const { isAdmin } = require("../middlewares/isAdmin")
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 /* Post new contact */
