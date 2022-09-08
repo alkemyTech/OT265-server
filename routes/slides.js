@@ -1,11 +1,22 @@
 const router = require('express').Router();
 
 //-------------------Middlewares----------------------//
+
 const { isAdmin } = require('../middlewares/isAdmin');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
 //-------------------Controllers----------------------//
-const { listarSlides } = require('../controllers/slides_controllers');
+const { listarSlides, deleteSlide, slideDetails } = require('../controllers/slides_controllers');
+
+
+
+router.delete('/:id', [
+    isAuthenticated,
+    isAdmin
+], deleteSlide);
+
+
+
 
 router.get('/', [
     isAuthenticated,
@@ -13,9 +24,8 @@ router.get('/', [
 ], listarSlides);
 
 
-const { slideDetails } = require('../controllers/slide_controllers');
-
 router.get('/:id', slideDetails);
+
 
 
 module.exports = router;

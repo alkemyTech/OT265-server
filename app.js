@@ -18,7 +18,7 @@ const activitiesRouter = require("./routes/activities");
 const newsRouter = require("./routes/news");
 const categoriesRouter = require("./routes/categories");
 const organizationRouter = require("./routes/organization");
-const slidesRouter = require('./routes/slides');
+const slidesRouter = require("./routes/slides");
 
 
 const app = express();
