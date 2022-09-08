@@ -1,19 +1,47 @@
 const db = require('../models/index');
-const Testimonial = db.Testimonial;
+const Testimonial = db.Testimonials;
 const { uploadImage } = require('../services/uploadImages');
 const member_controllers = require('./member_controllers');
 
 const getAllTestimonials = async (req, res) => {
 	try {
-		const testimonials = await Testimonial.findAll();
-		if (!testimonials.length) return res.status(200).send({
-			success: true,
-			message: "No testimonials have been created yet"
-		})
-		res.status(200).send({
-			success: true,
-			testimonials: testimonials
-		})
+		const { page } = req.query;
+		let currentPage = page ? Number.parseInt(page) : 1
+		let pageLimit = 10;
+		let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+	
+		const allTestimonials = await Testimonial.findAndCountAll({
+			attributes: {
+				exclude: ['deletedAt', 'createdAt', 'updatedAt']
+			},
+			limit: pageLimit,
+			offset: (currentPage * pageLimit) - pageLimit
+		});
+	
+		if (!allTestimonials.count) {
+			return res.json({
+			success: false,
+			message: 'No testimonials have been created yet'
+		})} else if(allTestimonials.count && !allTestimonials.rows.length) {
+			return res.json({
+			success: false,
+			message: 'Invalid page.'
+		})};
+	
+		const nextPage = !page ? `${currentUrl}?page=2` : currentUrl.replace(`page=${page}`, `page=${currentPage + 1}`);
+		const previousPage = `${currentUrl.replace(`page=${page}`, `page=${currentPage - 1}`)}`;
+	
+		const response = {
+			ok: true,
+			totalPages: allTestimonials.count / pageLimit,
+			next: nextPage,
+			previous: previousPage,
+			data: allTestimonials.rows,
+		};
+	
+		if(page >= allTestimonials.count / pageLimit) response.next = null
+		if(!page || page - 1 <= 0) response.previous = null
+		res.status(200).json(response)
 	} catch (err) {
 		res.status(400).send({
 			error: true,

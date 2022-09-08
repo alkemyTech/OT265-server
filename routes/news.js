@@ -1,13 +1,20 @@
 var express = require("express");
 var router = express.Router();
 const { check } = require("express-validator");
+const { query } = require("express-validator/")
 
 const { isAdmin } = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const validarCampos = require("../middlewares/validar_campos");
-const { getNewById, postNews, putNews, deleteNews } = require("../controllers/newsControllers");
 const Comment = require("../controllers/comment_controllers");
+const { getNewById, postNews, putNews, deleteNews, getAllNews } = require("../controllers/newsControllers");
 const { checkImage } = require("../middlewares/checkImage");
+
+router.get("/", [
+    // isAuthenticated,
+    query("page", "The page must be type number and positive").optional().isInt({ min: 1 }),
+    validarCampos,
+], getAllNews)
 
 router.get("/:id", [
     isAuthenticated,
