@@ -9,11 +9,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       image: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       address: {
@@ -23,7 +21,6 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       welcomeText: {
@@ -33,7 +30,6 @@ module.exports = {
         type: Sequelize.STRING
       },
       facebook: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       linkedin: {
