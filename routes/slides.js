@@ -6,14 +6,12 @@ const { isAdmin } = require('../middlewares/isAdmin');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
 //-------------------Controllers----------------------//
-const { listarSlides, deleteSlide, slideDetails } = require('../controllers/slides_controllers');
+const { listarSlides, deleteSlide, slideDetails, editSlide } = require('../controllers/slides_controllers');
 
-
-
-router.delete('/:id', [
+router.put('/:id', [
     isAuthenticated,
     isAdmin
-], deleteSlide);
+], editSlide);
 
 
 
