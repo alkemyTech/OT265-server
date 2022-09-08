@@ -10,6 +10,8 @@ const ActivityControllers = require("../controllers/activity_controllers");
 router.post(
   "/",
   [
+    isAuthenticated,
+    isAdmin,
     check("name", "The name must not be empty.").not().isEmpty(),
     check("name", "The name must be type string.").isString(),
     check("content", "The content must not be empty.").not().isEmpty(),
