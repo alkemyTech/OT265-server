@@ -1,10 +1,11 @@
+              <<<<<<< feature/ot265-endpoint-delete-slides-by-id
 
 const db = require('../models/index');
+    
 const Slide = db.Slide;
 
 const deleteSlide = async (req, res) => {
     const { id } = req.params;
-    
     const slide = await Slide.findByPk( id );
 
     if(!slide){
@@ -23,5 +24,7 @@ const deleteSlide = async (req, res) => {
 }
 
 module.exports = {
-    deleteSlide
+    deleteSlide,
+    listarSlides
+
 }
