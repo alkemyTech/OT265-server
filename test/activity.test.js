@@ -7,14 +7,9 @@ const db = require('../models/index');
 const Activity = db.Activity;
 const server = require('../app');
 
-const { generateTestToken, generateAccessToken } = require('../helpers/jwt.js')
+const { generateAccessToken } = require('../helpers/jwt.js')
 
 chai.use(http);
-
-// const token = {
-//     admin: generateTestToken(1),
-//     user: generateTestToken(11)
-// }
 
 const placeholder = {
     name: 'name-test',
