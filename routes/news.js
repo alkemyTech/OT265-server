@@ -6,6 +6,7 @@ const { query } = require("express-validator/")
 const { isAdmin } = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const validarCampos = require("../middlewares/validar_campos");
+const Comment = require("../controllers/comment_controllers");
 const { getNewById, postNews, putNews, deleteNews, getAllNews } = require("../controllers/newsControllers");
 const { checkImage } = require("../middlewares/checkImage");
 
@@ -41,5 +42,10 @@ router.delete("/:id", [
     isAuthenticated,
     isAdmin
 ], deleteNews)
+
+// List the comments of a news.
+router.get("/:id/comments", [
+    isAuthenticated
+], Comment.getComments)
 
 module.exports = router;
