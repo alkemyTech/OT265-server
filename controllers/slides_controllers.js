@@ -1,9 +1,10 @@
-
 const db = require('../models/index');
+   
 const Slide = db.Slide;
 
 const editSlide = async (req, res) => {
     const { id } = req.params;
+
     const { imageUrl, text, order, organizationId } = req.body;
     
     const slide = await Slide.findByPk( id, {
@@ -34,5 +35,7 @@ const editSlide = async (req, res) => {
 }
 
 module.exports = {
-    editSlide
+    editSlide,
+    deleteSlide,
+    listarSlides
 }
