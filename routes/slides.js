@@ -4,13 +4,14 @@ const router = require("express").Router();
 
 const { isAdmin } = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
-
+const { decodeBase64Image } = require('../helpers/image-helpers');
 //-------------------Controllers----------------------//
 const {
     listarSlides,
     deleteSlide,
     slideDetails,
     editSlide,
+    create_slide,
 } = require("../controllers/slides_controllers");
 
 router.put("/:id", [isAuthenticated, isAdmin], editSlide);
