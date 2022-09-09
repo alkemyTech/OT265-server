@@ -1,9 +1,25 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const { slideDetails, create_slide } = require('../controllers/slide_controllers');
-const { decodeBase64Image } = require('../helpers/image-helpers');
+//-------------------Middlewares----------------------//
 
-router.get('/:id', slideDetails);
+const { isAdmin } = require("../middlewares/isAdmin");
+const isAuthenticated = require("../middlewares/isAuthenticated");
+
+//-------------------Controllers----------------------//
+const {
+    listarSlides,
+    deleteSlide,
+    slideDetails,
+    editSlide,
+} = require("../controllers/slides_controllers");
+
+router.put("/:id", [isAuthenticated, isAdmin], editSlide);
+
+router.delete("/:id", [isAuthenticated, isAdmin], deleteSlide);
+
+router.get("/", [isAuthenticated, isAdmin], listarSlides);
+
+router.get("/:id", slideDetails);
 
 router.post('/', decodeBase64Image, create_slide);
 

@@ -3,21 +3,45 @@ const News = db.News;
 const Category = db.Category;
 const { uploadImage } = require("../services/uploadImages");
 
-const getAllNews = async (err, req, res, next) => {
+const getAllNews = async (req, res, next) => {
   try {
-    const allNews = await News.findAll();
+    const { page } = req.query;
+    let currentPage = page ? Number.parseInt(page) : 1
+    let pageLimit = 10;
+    let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
 
-    if (!allNews) {
-      res.status(200).json({
+    const allNews = await News.findAndCountAll({
+        attributes: {
+            exclude: ['deletedAt', 'createdAt', 'updatedAt']
+        },
+        limit: pageLimit,
+        offset: (currentPage * pageLimit) - pageLimit
+    });
+
+    if (!allNews.count) {
+        return res.json({
+        success: false,
+        message: 'No news have been created yet'
+    })} else if(allNews.count && !allNews.rows.length) {
+        return res.json({
+        success: false,
+        message: 'Invalid page.'
+    })};
+
+    const nextPage = !page ? `${currentUrl}?page=2` : currentUrl.replace(`page=${page}`, `page=${currentPage + 1}`);
+    const previousPage = `${currentUrl.replace(`page=${page}`, `page=${currentPage - 1}`)}`;
+
+    const response = {
         ok: true,
-        message: "There are no news available.",
-      });
-    } else {
-      res.status(200).json({
-        ok: true,
-        data: allNews,
-      });
-    }
+        totalPages: allNews.count / pageLimit,
+        next: nextPage,
+        previous: previousPage,
+        data: allNews.rows,
+    };
+
+    if(page >= allNews.count / pageLimit) response.next = null
+    if(!page || page - 1 <= 0) response.previous = null
+    res.status(200).json(response)
   } catch (err) {
     next(err);
   }
