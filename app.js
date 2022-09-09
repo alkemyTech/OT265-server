@@ -34,11 +34,12 @@ app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
-    debug: true,
+    debug: false,
   })
 );
 
-app.use(logger("dev"));
+// Disable logger to test
+// app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
