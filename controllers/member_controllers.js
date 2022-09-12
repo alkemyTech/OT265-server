@@ -115,7 +115,7 @@ class MemberController {
         if (linkedinUrl) member.linkedinUrl = linkedinUrl;
         if (description) member.description = description;
         // AWS S3 IMAGE SERVICE CHECK
-        if (req.files.image) {
+        if (req.files) {
             let imgUrl = ''
             const { image } = req.files;
             imgUrl = await uploadImage(image);
