@@ -1,4 +1,5 @@
 const db = require('../models/index');
+const slide = db.Slide;
 const Organization = db.Organization;
 
 const getAllOrganizations = async (req, res) => {
@@ -9,7 +10,7 @@ const getAllOrganizations = async (req, res) => {
 }
 
 const getOrganizationById = async (req, res) => {
-	const id  = 1;
+	const {id}  =  req.params;
 
 	const organization = await Organization.findByPk(id);
 	if (!organization) return res.status(400).json({ msg: 'Organization not found.' });
