@@ -28,6 +28,8 @@ const decodeBase64Image = async (req, res, next) => {
       next()
     }
   })
+
+  console.log(matches)
 }
 
 module.exports = { decodeBase64Image };

@@ -9,8 +9,10 @@ const isAuthenticated = require("../middlewares/isAuthenticated")
 const { isAdmin } = require("../middlewares/isAdmin");
 const validarCampos = require('../middlewares/validar_campos');
 
-/* Get all categories endpoint */
+/* Get all organizations endpoint */
 router.get('/public', getAllOrganizations);
+
+router.get('/public/:id', getAllOrganizations);
 
 router.put("/public", [isAuthenticated, isAdmin,
     check("name", "name must be a string.").optional().isString(),
