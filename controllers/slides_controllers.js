@@ -1,3 +1,4 @@
+const { uploadFile } = require("../helpers/aws-s3");
 const db = require("../models/index");
 
 const Slide = db.Slide;
@@ -80,20 +81,20 @@ const deleteSlide = async (req, res) => {
 
 const create_slide = async (req, res) => {
   try {
-    const image = require('../images/image')
-    const { text, organizationId } = req.body;
-
+    //const image = require('../images/image')
+    const { image, text, organizationId } = req.body;
+    console.log(image)
     // let response = decodeBase64Image(image);
     // console.log(response);
     //decodea la imagen y devuelve response con tipo de extension y la imagen
     // console.log("HERE BE RESPONSE  ", response)
-    if (!response) return res.status(400).send({
+   /*  if (!res) return res.status(400).send({
       success: false,
       message: "Wrong file extension"
-    });
+    }); */
 
-    imgUrl = await uploadImage(image);
-    console.log(imgUrl);
+    imgUrl = await uploadFile(image);
+    
     if (imgUrl === '') return res.status(403).send({
       success: false,
       message: 'Image could not be found',

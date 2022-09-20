@@ -24,6 +24,7 @@ const decodeBase64Image = async (req, res, next) => {
         message: err.message
       })
     } else {
+      req.body.image=`images/image.${type[1]}`
       console.log('Image created');
       next()
     }
