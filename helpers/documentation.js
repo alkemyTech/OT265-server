@@ -1,5 +1,6 @@
 const userRouteDoc = require("../DocumentationSchemas/user.doc");
 const newsRouteDoc = require("../DocumentationSchemas/news.doc");
+const authRouteDoc = require("../DocumentationSchemas/auth.docs");
 
 const swaggerDocumentation = {
   openapi: "3.0.0",
@@ -22,7 +23,8 @@ const swaggerDocumentation = {
   ],
   paths: {
     ...userRouteDoc,
-    ...newsRouteDoc
+    ...newsRouteDoc,
+    ...authRouteDoc,
   },
 };
 
