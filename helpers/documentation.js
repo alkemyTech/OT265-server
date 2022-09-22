@@ -3,6 +3,7 @@ const categoryRouteDoc = require("../DocumentationSchemas/category.doc");
 const newsRouteDoc = require("../DocumentationSchemas/news.doc");
 const testimonialsRouteDoc = require("../DocumentationSchemas/testimonial.doc");
 const authRouteDoc = require("../DocumentationSchemas/auth.docs");
+const membersRouteDoc = require("../DocumentationSchemas/members.docs");
 
 const swaggerDocumentation = {
   openapi: "3.0.0",
@@ -28,7 +29,8 @@ const swaggerDocumentation = {
     ...categoryRouteDoc,
     ...newsRouteDoc,
     ...testimonialsRouteDoc,
-    ...authRouteDoc
+    ...authRouteDoc,
+    ...membersRouteDoc
   },
 };
 
