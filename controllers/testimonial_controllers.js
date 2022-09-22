@@ -140,7 +140,7 @@ const deleteTestimonial = async (req, res) => {
 		const { id } = req.params;
 
 		const testimonial = await Testimonial.findByPk(id);
-		if (!testimonial) return res.json({
+		if (!testimonial) return res.status(400).json({
 			success: false,
 			message: `Testimonial ID: ${id} doesn't exist`
 		});
