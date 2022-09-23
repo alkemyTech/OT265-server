@@ -12,7 +12,7 @@ router.get('/', [
   isAdmin
 ], getAllUsers);
 
-router.patch('/:id', [
+router.put('/:id', [
   isAuthenticated,
   isOwnership,
   body('firstName', 'El nombre no debe contener numeros').isString().optional(),

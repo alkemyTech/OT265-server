@@ -1,6 +1,7 @@
 
 const db = require('../models/index');
 const User = db.User;
+const bcryptjs = require('bcryptjs');
 
 const getAllUsers = async (req, res) => {
 	const users = await User.findAll();
@@ -45,7 +46,7 @@ const deleteUser = async (req, res) => {
 	const user = await User.findByPk(id);
 	if (!user) return res.json({ msg: 'User not found.' });
 
-	user.deletedAt = new Date().toLocaleDateString();
+	user.deletedAt = new Date();
 	await user.save();
 
 	res.status(200).json({ data: user })

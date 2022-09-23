@@ -126,20 +126,20 @@ describe('Auth Tests', () => {
                     expect(error).to.equal('El apellido es obligatorio.')
                     done();
                 })
-        }) 
-        
-        
+        })
+
+
         it("Request with 'email' property match with email format", (done) => {
             chai.request(server)
-            .post('/auth/register')
-            .send({ firstName: 'firstNameTest', lastName: 'lastNameTest', email: 'testtest.test', password: 'passwordTest' })
-            .end((err, res) => {
-                const error = res.body.errors[0].msg
-                expect(error).to.equal('El correo no es valido.')
-                done();
-            })
-        })  
-        
+                .post('/auth/register')
+                .send({ firstName: 'firstNameTest', lastName: 'lastNameTest', email: 'testtest.test', password: 'passwordTest' })
+                .end((err, res) => {
+                    const error = res.body.errors[0].msg
+                    expect(error).to.equal('El correo no es valido.')
+                    done();
+                })
+        })
+
         it("Request with 'property' exist value", (done) => {
             chai.request(server)
                 .post('/auth/register')
@@ -153,15 +153,15 @@ describe('Auth Tests', () => {
 
         it("Request with 'email' property match with email format", (done) => {
             chai.request(server)
-            .post('/auth/register')
-            .send({ firstName: 'firstNameTest', lastName: 'lastNameTest', email: 'testtest.test', password: 'passwordTest' })
-            .end((err, res) => {
-                const error = res.body.errors[0].msg
-                expect(error).to.equal('El correo no es valido.')
-                done();
-            })
-        })  
-        
+                .post('/auth/register')
+                .send({ firstName: 'firstNameTest', lastName: 'lastNameTest', email: 'testtest.test', password: 'passwordTest' })
+                .end((err, res) => {
+                    const error = res.body.errors[0].msg
+                    expect(error).to.equal('El correo no es valido.')
+                    done();
+                })
+        })
+
         it("Request with 'password' value shorter than 6 characters", (done) => {
             chai.request(server)
                 .post('/auth/register')
@@ -222,18 +222,17 @@ describe('Auth Tests', () => {
     // Get method tests
     describe('Get authenticated Method', () => {
 
-        it('Request with user authenticated',(done) => {
+        it('Request with user authenticated', (done) => {
             chai.request(server)
                 .get('/auth/me')
                 .set('Authorization', `Bearer ${userToken}`)
                 .end((err, res) => {
-                    console.log(res)
                     expect(res).to.have.status(200);
                     done();
                 })
         })
 
-        it('Request without user authenticated',(done) => {
+        it('Request without user authenticated', (done) => {
             chai.request(server)
                 .get('/auth/me')
                 .end((err, res) => {
