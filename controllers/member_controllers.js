@@ -34,7 +34,7 @@ class MemberController {
 
         const response = {
             ok: true,
-            totalPages: members.count / pageLimit,
+            totalPages: Math.ceil(members.count / pageLimit),
             next: nextPage,
             previous: previousPage,
             data: members.rows,
@@ -104,7 +104,7 @@ class MemberController {
             }
         });
 
-        if (!member) return res.json({
+        if (!member) return res.status(404).json({
             success: false,
             message: `The member id: ${id} doesn't exist`
         });
@@ -143,7 +143,7 @@ class MemberController {
             }
         });
 
-        if (!member) return res.json({ msg: 'Member not found.' })
+        if (!member) return res.status(404).json({ msg: 'Member not found.' })
 
         member.destroy();
 

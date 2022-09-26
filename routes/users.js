@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const isAuthenticated = require('../middlewares/isAuthenticated');
-const { isOwnership } = require('../controllers/isOwnership');
+const { isOwnership } = require('../middlewares/isOwnership');
 const { getAllUsers, putUser, deleteUser } = require('../controllers/user_controllers');
 const { isAdmin } = require('../middlewares/isAdmin');
 const { body } = require('express-validator');
@@ -12,7 +12,7 @@ router.get('/', [
   isAdmin
 ], getAllUsers);
 
-router.patch('/:id', [
+router.put('/:id', [
   isAuthenticated,
   isOwnership,
   body('firstName', 'El nombre no debe contener numeros').isString().optional(),
