@@ -6,7 +6,7 @@ module.exports = {
 		try {
 			const bucket = process.env.AWS_BUCKET_NAME_IMAGES;
 			const fileExtension = image.name.split('.').pop();
-			const allowedExtensions = ['png', 'gif', 'jpg'];
+			const allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
 
 			if (allowedExtensions.includes(fileExtension)) {
 				const img = await uploadFile(bucket, image);

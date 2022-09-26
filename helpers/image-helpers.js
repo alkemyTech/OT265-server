@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const decodeBase64Image = async (req, res, next) => {
-  const { imageString } = req.body
+  const { imageString, organizationId } = req.body
   var matches = imageString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/)
 
   if (matches.length !== 3) {
@@ -16,8 +16,8 @@ const decodeBase64Image = async (req, res, next) => {
     message: "Wrong file type"
   });
   data = Buffer.from(matches[2], 'base64');
-  // req.files.image = fs.writeFile(`imagen.${type[1]}`, data);
-  fs.writeFile(`images/image.${type[1]}`, data, (err) => {
+  
+  req.files = fs.writeFile(`images/organization${organizationId}.${type[1]}`, data, (err) => {
     if (err) {
       return res.status(400).send({
         error: true,
@@ -25,9 +25,11 @@ const decodeBase64Image = async (req, res, next) => {
       })
     } else {
       console.log('Image created');
+      console.log("matches",matches[3])
       next()
     }
   })
+
 }
 
 module.exports = { decodeBase64Image };
