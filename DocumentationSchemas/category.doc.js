@@ -18,7 +18,7 @@ const getCategories = {
                         type: "object",
                         example: {
                             "ok": true,
-                            "totalPages": 2.7,
+                            "totalPages": 3,
                             "next": "http://localhost:3000/categories?page=2",
                             "previous": null,
                             "data": [

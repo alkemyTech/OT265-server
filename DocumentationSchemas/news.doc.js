@@ -11,7 +11,7 @@ const getNews = {
                         example: {
                             news: {
                                 "ok": true,
-                                "totalPages": 0.3,
+                                "totalPages": 1,
                                 "next": "http://localhost:3000/news?page=2",
                                 "previous": null,
                                 "data": [

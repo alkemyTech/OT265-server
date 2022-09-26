@@ -31,7 +31,7 @@ class CategoryController {
 
         const response = {
             ok: true,
-            totalPages: categories.count / pageLimit,
+            totalPages: Math.ceil(categories.count / pageLimit),
             next: nextPage,
             previous: previousPage,
             data: categories.rows,
