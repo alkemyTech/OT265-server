@@ -33,7 +33,7 @@ const getAllNews = async (req, res, next) => {
 
     const response = {
         ok: true,
-        totalPages: allNews.count / pageLimit,
+        totalPages: Math.ceil(allNews.count / pageLimit),
         next: nextPage,
         previous: previousPage,
         data: allNews.rows,

@@ -11,7 +11,7 @@ const getTestimonials = {
                         type: "object",
                         example: {
                             "ok": true,
-                            "totalPages": 0.3,
+                            "totalPages": 1,
                             "next": "http://localhost:3000/testimonials?page=2",
                             "previous": null,
                             "data": [

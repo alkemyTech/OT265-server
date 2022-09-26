@@ -33,7 +33,7 @@ const getAllTestimonials = async (req, res) => {
 	
 		const response = {
 			ok: true,
-			totalPages: allTestimonials.count / pageLimit,
+			totalPages: Math.ceil(allTestimonials.count / pageLimit),
 			next: nextPage,
 			previous: previousPage,
 			data: allTestimonials.rows,
