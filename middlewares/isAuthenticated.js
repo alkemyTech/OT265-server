@@ -6,7 +6,6 @@ const User = db.User;
 
 const isAuthenticated = async (req, res, next) => {
 	let token = req.header('Authorization');
-	console.log('meow', token)
 	if (!token) {
 		return res.status(403).json({
 			error: "No envio un token valido."
