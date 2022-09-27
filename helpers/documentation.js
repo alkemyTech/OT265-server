@@ -4,13 +4,14 @@ const newsRouteDoc = require("../DocumentationSchemas/news.doc");
 const testimonialsRouteDoc = require("../DocumentationSchemas/testimonial.doc");
 const authRouteDoc = require("../DocumentationSchemas/auth.docs");
 const membersRouteDoc = require("../DocumentationSchemas/members.docs");
+const slidesRouteDoc = require("../DocumentationSchemas/slides.doc");
 
 const swaggerDocumentation = {
   openapi: "3.0.0",
   info: {
     title: "OT265 Server",
     version: "1.0.0",
-    description: "This is the description of documentation",
+    description: "Documentacion para la API del proyecto OT 265 Node.js",
   },
   servers: [
     {
@@ -22,23 +23,24 @@ const swaggerDocumentation = {
     securitySchemes: {
       BearerAuth: {
         type: "http",
-        scheme: "bearer"
-      }
-    }
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
   },
-  tags: [
+  security: [
     {
-      name: "Users",
-      description: "Users routes",
+      BearerAuth: [],
     },
   ],
   paths: {
     ...authRouteDoc,
+    ...slidesRouteDoc,
     ...userRouteDoc,
     ...categoryRouteDoc,
     ...newsRouteDoc,
     ...testimonialsRouteDoc,
-    ...membersRouteDoc
+    ...membersRouteDoc,
   },
 };
 

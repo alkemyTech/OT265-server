@@ -1,7 +1,6 @@
-const {uploadImage} = require('../services/uploadImages.js')
+const { uploadImage } = require("../services/uploadImages.js");
 const db = require("../models/index");
-const path = require('path')
-
+const { decodeBase64Image } = require("../helpers/image-helpers");
 const Slide = db.Slide;
 
 const editSlide = async (req, res) => {
@@ -82,49 +81,34 @@ const deleteSlide = async (req, res) => {
 
 const create_slide = async (req, res) => {
   try {
-    //const image = require('../images/image')
-    const {  text, organizationId } = req.body;
-    console.log(image)
-    // let response = decodeBase64Image(image);
-    // console.log(response);
-    //decodea la imagen y devuelve response con tipo de extension y la imagen
-    // console.log("HERE BE RESPONSE  ", response)
-    /*  if (!res) return res.status(400).send({
-       success: false,
-       message: "Wrong file extension"
-     }); */
+    let { text, organizationId, image, order } = req.body;
+    let { imageType, data } = await decodeBase64Image(image);
 
-    imgUrl = await uploadImage(req.files.image);
-    if (imgUrl === '') return res.status(403).send({
-        success: false,
-        message: 'invalid image format',
-        image: `${req.files.image}`
-    });
-
+    let imgUrl = await uploadImage(data, imageType);
     if (!order) {
-      var count = await Slide.count();
-      count++;
+      order = await Slide.count();
+      order++;
     }
 
-    await Slide.create(imageUrl = imgUrl, text, order ? order : order = count, organizationId);
-
-    res.status(201).send({
-      success: true,
-      message: "Slide created successfully"
-    })
-
+    const slide = await Slide.create({
+      imageUrl: imgUrl,
+      text,
+      order,
+      organizationId,
+    });
+    res.status(201).send(slide);
   } catch (err) {
     res.status(500).send({
       error: true,
-      message: err.message
-    })
+      message: err.message,
+    });
   }
-}
+};
 
 module.exports = {
   editSlide,
   deleteSlide,
   listarSlides,
   slideDetails,
-  create_slide
+  create_slide,
 };
