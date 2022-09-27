@@ -18,6 +18,14 @@ const swaggerDocumentation = {
       description: "Local Dev",
     },
   ],
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer"
+      }
+    }
+  },
   tags: [
     {
       name: "Users",
@@ -25,11 +33,11 @@ const swaggerDocumentation = {
     },
   ],
   paths: {
+    ...authRouteDoc,
     ...userRouteDoc,
     ...categoryRouteDoc,
     ...newsRouteDoc,
     ...testimonialsRouteDoc,
-    ...authRouteDoc,
     ...membersRouteDoc
   },
 };

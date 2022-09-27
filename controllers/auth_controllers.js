@@ -33,47 +33,46 @@ const register = async (req, res) => {
   })
 }
 //Controller de Login
-const login = async( req,res )=>{
+const login = async (req, res) => {
+  console.log(req.body)
+  const { email, password } = req.body;
 
-  const { email, password} = req.body;
+  try {
+    const user = await User.findOne({ where: { email } })
 
-  try{
-    const user = await User.findOne( { where : { email }} )
-
-    if( !user ){
+    if (!user) {
       return res.status(400).json({
-        msg:"User not found"
+        msg: "User not found"
       })
     }
 
     //Comparar password
-    const validPassword = bcryptjs.compareSync( password, user.password)
+    const validPassword = bcryptjs.compareSync(password, user.password)
 
-    if( !validPassword ){
+    if (!validPassword) {
       return res.status(409).json({
-        msg:"Invalid Password"
+        msg: "Invalid Password"
       })
     }
 
     //Generar Token
-    const token = await generateAccessToken( user.id )
+    const token = await generateAccessToken(user.id)
     res.json({
       msg: "Login Ok",
       user,
       token
     })
 
-  } catch ( error ){
-    console.log( error )
+  } catch (error) {
     return res.status(500).json({
-      msg: "Contact the Administrator",
+      message: error.message,
     })
   }
-  
-  
+
+
 }
 
-const dataUserAuth = async(req, res, next) => {
+const dataUserAuth = async (req, res, next) => {
   const { userAuth } = req;
 
   res.status(200).json({
