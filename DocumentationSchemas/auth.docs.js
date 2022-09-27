@@ -2,29 +2,34 @@
 const register = {
     tags: ["Auth"],
     description: "Register a user",
-    parameters: [
-        {
-            in: 'body',
-            name: 'firstName',
-            type: 'string',
-            required: true
-        },
-        {
-            in: 'body',
-            name: 'lastName',
-            required: true
-        },
-        {
-            in: 'body',
-            name: 'email',
-            type: 'email',
-        },
-        {
-            in: 'body',
-            name: 'password',
-            description: 'min lenth should be 6'
+    requestBody: {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        firstName: {
+                            type: "string",
+                            example: "Pepe"
+                        },
+                        lastName: {
+                            type: "string",
+                            example: "Benítez"
+                        },
+                        email: {
+                            type: "string",
+                            example: "pepe.b@gmail.com"
+                        },
+                        password: {
+                            type: "string",
+                            example: "Pepe12345"
+                        }
+                    }
+                }
+            }
         }
-    ],
+    },
     responses: {
         201: {
             description: "OK",
@@ -75,16 +80,26 @@ const register = {
 const login = {
     tags: ["Auth"],
     description: "User login",
-    parameters: [
-        {
-            in: 'body',
-            name: 'email',
-        },
-        {
-            in: 'body',
-            name: 'password',
+    requestBody: {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        email: {
+                            type: "string",
+                            example: "miguel@gmail.com"
+                        },
+                        password: {
+                            type: "string",
+                            example: "Miguel1234"
+                        }
+                    }
+                }
+            }
         }
-    ],
+    },
     responses: {
         202: {
             description: "OK",
@@ -190,7 +205,10 @@ const authRouteDoc = {
         post: login
     },
     "/auth/me": {
-        get: dataUser
+        security: {
+            BearerAuth: "bearer"
+        },
+        get: dataUser,
     },
 };
 
