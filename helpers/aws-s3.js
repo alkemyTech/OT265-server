@@ -1,33 +1,27 @@
-const S3 = require('aws-sdk/clients/s3');
-const fs = require('fs');
+const S3 = require("aws-sdk/clients/s3");
+const { uuid } = require("uuidv4");
 
 const region = process.env.AWS_REGION;
 
 const storage = new S3({
-    region,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
+  region,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
 module.exports = {
+  uploadFile: async (bucketName, data, fileExtension) => {
+    const key = `${uuid()}.${fileExtension}`;
 
-    uploadFile: (bucketName, file) => {
-        const body = fs.createReadStream(file.tempFilePath);
-        const path = file.tempFilePath.split('-').pop();
-        const key = `${path}${file.name}`
-        const params = {
-            Bucket: bucketName,
-            Key: key,
-            Body: body,
-        };
+    const params = {
+      Bucket: bucketName,
+      Key: key,
+      Body: data,
+    };
 
-        storage.upload(params).promise();
-
-        const url = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`
-
-        return url;
-    }
-
-}
+    const uploadResult = await storage.upload(params).promise();
+    return uploadResult.Location;
+  },
+};
